@@ -33,8 +33,8 @@ const main = async () => {
         // ApolloServerPluginInlineTraceDisabled()
 
         process.env.NODE_ENV === 'production'
-          ? ApolloServerPluginLandingPageProductionDefault()
-          : ApolloServerPluginLandingPageLocalDefault({ embed: false })
+          ? ApolloServerPluginLandingPageProductionDefault({ footer: false })
+          : ApolloServerPluginLandingPageLocalDefault({ footer: false })
       ]
     })
     app.use(graphqlUploadExpress())
