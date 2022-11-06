@@ -20,13 +20,17 @@ const main = async () => {
   try {
     await connectDB()
     const apolloServer = new ApolloServer({
-      cache: 'bounded',
-      introspection: true,
-      csrfPrevention: true,
+      // cache: 'bounded',
+      // introspection: true,
+      // csrfPrevention: true,
       context: (ctx: ApolloCtx) => ctx,
       schema: await buildSchema({ resolvers, validate: false }),
       // plugins: [ApolloServerPluginLandingPageGraphQLPlayground()]
       plugins: [
+        process.env.NODE_ENV === 'production'
+          ? ApolloServerPluginLandingPageProductionDefault({ footer: false })
+          : ApolloServerPluginLandingPageLocalDefault({ footer: false })
+
         // Install a landing page plugin based on NODE_ENV
         // process.env.NODE_ENV === 'production'
         //   ? ApolloServerPluginLandingPageProductionDefault()
