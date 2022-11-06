@@ -1,10 +1,12 @@
 import * as JWT from 'jsonwebtoken'
+import * as dotenv from 'dotenv'
+dotenv.config()
 
-const SECRETKEY = process.env.SECRETKEY || 'Ricardo22*'
+const SECRETKEY = process.env.SECRETKEY
 
 export const genJWT = (id: number): Promise<string | undefined> => {
   return new Promise((resolve, reject) => {
-    JWT.sign({ id }, SECRETKEY, { expiresIn: '24h' }, function (err, token) {
+    JWT.sign({ id }, SECRETKEY!, { expiresIn: '24h' }, function (err, token) {
       if (err) {
         reject(err)
       }
@@ -16,7 +18,7 @@ export const genJWT = (id: number): Promise<string | undefined> => {
 
 export const verifyJWT = (token: string) => {
   try {
-    return JWT.verify(token, SECRETKEY)
+    return JWT.verify(token, SECRETKEY!)
   } catch (error) {
     return null
   }

@@ -1,13 +1,20 @@
 import nodemailer from 'nodemailer'
+import * as dotenv from 'dotenv'
+dotenv.config()
+
+const EMAIL_USER = process.env.EMAIL_USER
+const EMAIL_PASS = process.env.EMAIL_PASS
+const EMAIL_HOST = process.env.EMAIL_HOST
+const EMAIL_PORT = process.env.EMAIL_PORT
 
 export const emailRegister = async ({ email, nombre, token }: { email?: string; nombre?: string; token?: string }) => {
   const transport = nodemailer.createTransport({
-    host: 'smtp.gmail.com',
+    host: EMAIL_HOST,
     secure: true, // true for 465, false for other ports
-    port: 465,
+    port: Number(EMAIL_PORT),
     auth: {
-      user: 'ricardosv46@gmail.com',
-      pass: 'fnatolenyxhrelwr'
+      user: EMAIL_USER,
+      pass: EMAIL_PASS
     }
   })
 
@@ -30,12 +37,12 @@ export const emailRegister = async ({ email, nombre, token }: { email?: string; 
 
 export const recoveryPasswordEmail = async ({ email, nombre, token }: { email?: string; nombre?: string; token?: string }) => {
   const transport = nodemailer.createTransport({
-    host: 'smtp.gmail.com',
+    host: EMAIL_HOST,
     secure: true, // true for 465, false for other ports
-    port: 465,
+    port: Number(EMAIL_PORT),
     auth: {
-      user: 'ricardosv46@gmail.com',
-      pass: 'fnatolenyxhrelwr'
+      user: EMAIL_USER,
+      pass: EMAIL_PASS
     }
   }) as any
 

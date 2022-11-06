@@ -5,16 +5,16 @@ import { connectDB } from './db'
 import { buildSchema } from 'type-graphql'
 import { graphqlUploadExpress } from 'graphql-upload'
 import { ApolloCtx } from './interface'
+import * as dotenv from 'dotenv'
+dotenv.config()
+
+const PORT = process.env.PORT
 
 const main = async () => {
   try {
     await connectDB()
     const apolloServer = new ApolloServer({
       context: (ctx: ApolloCtx) => ctx,
-      // context: async ({ req }: any) => {
-      //   const token = req.headers.authorization
-      //   return { token }
-      // },
       schema: await buildSchema({ resolvers, validate: false })
     })
     app.use(graphqlUploadExpress())
@@ -26,11 +26,11 @@ const main = async () => {
       res.send('Welcome to Graphql Upload!')
     })
 
-    console.log('listening on port 4000')
+    console.log(`listening on port ${PORT}`)
   } catch (error) {
     console.log(error)
   }
 }
 main()
 
-app.listen(4000)
+app.listen(PORT)

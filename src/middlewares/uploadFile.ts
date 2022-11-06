@@ -1,4 +1,11 @@
 import { v2 as cloudinary } from 'cloudinary'
+import * as dotenv from 'dotenv'
+dotenv.config()
+
+const CLOUD_NAME = process.env.CLOUD_NAME
+const CLOUD_API_KEY = process.env.CLOUD_API_KEY
+const CLOUD_API_SECRET = process.env.CLOUD_API_SECRET
+
 export const uploadFile = async (file: any) => {
   // The Upload scalar return a a promise
   const { createReadStream } = await file
@@ -6,9 +13,9 @@ export const uploadFile = async (file: any) => {
 
   // Initiate Cloudinary with your credentials
   cloudinary.config({
-    cloud_name: 'codigoconrich',
-    api_key: '817637684672277',
-    api_secret: 'bXdEB3G6Xux7TE28-JkwoLRlkgw'
+    cloud_name: CLOUD_NAME,
+    api_key: CLOUD_API_KEY,
+    api_secret: CLOUD_API_SECRET
   })
 
   // Return the Cloudinary object when it's all good
