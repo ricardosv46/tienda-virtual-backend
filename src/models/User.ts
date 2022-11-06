@@ -92,10 +92,58 @@ export class UserCreateInput {
 }
 
 @InputType()
+export class UserUpdateInput {
+  @Field()
+  id: number
+
+  @Field()
+  name: string
+
+  @Field()
+  lastname: string
+
+  @Field()
+  username: string
+
+  @Field()
+  email: string
+
+  @Field()
+  dni: string
+
+  @Field()
+  celular: string
+
+  @Field()
+  gender: string
+
+  @Field()
+  rol: string
+
+  @Field(() => GraphQLUpload, { nullable: true })
+  image?: string
+}
+
+@InputType()
 export class LoginInput {
   @Field()
   email!: string
 
   @Field()
   password!: string
+}
+
+@ObjectType()
+export class LoginResponse {
+  @Field()
+  username: string
+
+  @Field(() => String)
+  email: string
+
+  @Field(() => String)
+  lastname: string
+
+  @Field(() => String)
+  token: string
 }
