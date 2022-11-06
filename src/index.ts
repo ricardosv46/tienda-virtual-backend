@@ -24,15 +24,18 @@ const main = async () => {
       cache: 'bounded',
       context: (ctx: ApolloCtx) => ctx,
       schema: await buildSchema({ resolvers, validate: false }),
-      plugins: [ApolloServerPluginLandingPageGraphQLPlayground()]
-      // plugins: [
-      //   // Install a landing page plugin based on NODE_ENV
-      //   process.env.NODE_ENV === 'production'
-      //     ? ApolloServerPluginLandingPageProductionDefault()
-      //     : ApolloServerPluginLandingPageLocalDefault({ embed: true }),
-      //   ApolloServerPluginInlineTraceDisabled()
+      // plugins: [ApolloServerPluginLandingPageGraphQLPlayground()]
+      plugins: [
+        // Install a landing page plugin based on NODE_ENV
+        // process.env.NODE_ENV === 'production'
+        //   ? ApolloServerPluginLandingPageProductionDefault()
+        //   : ApolloServerPluginLandingPageLocalDefault({ embed: true }),
+        // ApolloServerPluginInlineTraceDisabled()
 
-      // ]
+        process.env.NODE_ENV === 'production'
+          ? ApolloServerPluginLandingPageProductionDefault()
+          : ApolloServerPluginLandingPageLocalDefault({ embed: false })
+      ]
     })
     app.use(graphqlUploadExpress())
     await apolloServer.start()
