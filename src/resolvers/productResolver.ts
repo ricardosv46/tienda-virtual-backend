@@ -15,14 +15,12 @@ class ProductResponse {
 
 @Resolver()
 export default class ProductResolver {
-  @UseMiddleware(isAuth)
   @Query(() => ProductResponse)
   async getAllProducts(@Arg('page') page: number, @Arg('numberPage') numberPage: number) {
     const [res, count] = await Product.findAndCount({ take: numberPage, skip: (page - 1) * numberPage })
     return { data: res, total: count }
   }
 
-  @UseMiddleware(isAuth)
   @Query(() => Product)
   async getProductId(@Arg('id') id: number) {
     const category = await Product.findOne({ where: { id } })

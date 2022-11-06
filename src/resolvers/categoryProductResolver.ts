@@ -15,14 +15,12 @@ class CategoryResponse {
 
 @Resolver()
 export default class CategoryProductResolver {
-  @UseMiddleware(isAuth)
   @Query(() => CategoryResponse)
   async getAllCategorys(@Arg('page') page: number, @Arg('numberPage') numberPage: number) {
     const [res, count] = await CategoryProduct.findAndCount({ take: numberPage, skip: (page - 1) * numberPage })
     return { data: res, total: count }
   }
 
-  @UseMiddleware(isAuth)
   @Query(() => CategoryProduct)
   async getCategoryId(@Arg('id') id: number) {
     const category = await CategoryProduct.findOne({ where: { id } })
