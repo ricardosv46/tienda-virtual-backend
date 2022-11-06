@@ -31,9 +31,7 @@ const main = async () => {
         //   ? ApolloServerPluginLandingPageProductionDefault()
         //   : ApolloServerPluginLandingPageLocalDefault({ embed: true }),
         // ApolloServerPluginInlineTraceDisabled()
-
-        ApolloServerPluginLandingPageGraphQLPlayground()
-
+        // ApolloServerPluginLandingPageGraphQLPlayground()
         // process.env.NODE_ENV === 'production'
         //   ? ApolloServerPluginLandingPageProductionDefault({ footer: false })
         //   : ApolloServerPluginLandingPageLocalDefault({ footer: false })
