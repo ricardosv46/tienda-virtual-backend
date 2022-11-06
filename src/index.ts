@@ -25,21 +25,10 @@ const main = async () => {
       csrfPrevention: true,
       context: (ctx: ApolloCtx) => ctx,
       schema: await buildSchema({ resolvers, validate: false }),
-      // plugins: [ApolloServerPluginLandingPageGraphQLPlayground()]
       plugins: [
         process.env.NODE_ENV === 'production'
           ? ApolloServerPluginLandingPageProductionDefault({ footer: false })
           : ApolloServerPluginLandingPageLocalDefault({ footer: false })
-
-        // Install a landing page plugin based on NODE_ENV
-        // process.env.NODE_ENV === 'production'
-        //   ? ApolloServerPluginLandingPageProductionDefault()
-        //   : ApolloServerPluginLandingPageLocalDefault({ embed: true }),
-        // ApolloServerPluginInlineTraceDisabled()
-        // ApolloServerPluginLandingPageGraphQLPlayground()
-        // process.env.NODE_ENV === 'production'
-        //   ? ApolloServerPluginLandingPageProductionDefault({ footer: false })
-        //   : ApolloServerPluginLandingPageLocalDefault({ footer: false })
       ]
     })
     app.use(graphqlUploadExpress())
