@@ -45,20 +45,19 @@ export default class CategoryProductResolver {
       })
       return { id: res.identifiers[0].id, ...input, image: '', condition: false }
     }
-    const data = (await uploadFile(input.image)) as { url: string; secure_url: string }
+    const { url, public_id } = (await uploadFile(input.image)) as { url: string; secure_url: string; public_id: string }
 
-    console.log({ data })
-
-    if (!data.url) {
+    if (!url) {
       throw new Error('La imagen no existe')
     }
 
     const res = await CategoryProduct.insert({
       ...input,
-      image: data.url,
+      image: url,
+      cloudId: public_id,
       condition: false
     })
-    return { id: res.identifiers[0].id, ...input, image: data.url, condition: false }
+    return { id: res.identifiers[0].id, ...input, image: url, cloudId: public_id, condition: false }
   }
 
   @UseMiddleware(isAuth)
@@ -93,9 +92,8 @@ export default class CategoryProductResolver {
 
     const res = await CategoryProduct.delete(id)
 
-    if (category.image) {
-      const res = await deleteFile(category?.image)
-      console.log('delete image', { res })
+    if (category.cloudId) {
+      await deleteFile(category.cloudId)
     }
 
     if (res.affected === 1) return { success: true, message: 'Eliminado Correctamente' }

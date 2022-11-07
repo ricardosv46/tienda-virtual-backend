@@ -18,7 +18,7 @@ export const connectDB = async () => {
     host: DB_HOST,
     database: DB_NAME,
     entities,
-    synchronize: false,
+    synchronize: true,
     ssl: true
   })
   dataSource

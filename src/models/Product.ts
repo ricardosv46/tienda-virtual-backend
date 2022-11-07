@@ -33,6 +33,10 @@ export class Product extends BaseEntity {
 
   @Column()
   @Field()
+  cloudId: string
+
+  @Column()
+  @Field()
   calification: string
 
   @Column()

@@ -48,6 +48,10 @@ export class User extends BaseEntity {
 
   @Column()
   @Field()
+  cloudId: string
+
+  @Column()
+  @Field()
   condition: boolean
 
   @Column()

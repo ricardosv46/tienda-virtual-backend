@@ -27,6 +27,10 @@ export class CategoryProduct extends BaseEntity {
   @Field()
   image: string
 
+  @Column()
+  @Field()
+  cloudId: string
+
   @OneToMany(() => Product, (product) => product.category, { eager: true })
   products: Product[]
 }
