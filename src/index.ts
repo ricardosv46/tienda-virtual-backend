@@ -22,7 +22,7 @@ const main = async () => {
     const apolloServer = new ApolloServer({
       cache: 'bounded',
       introspection: true,
-      csrfPrevention: true,
+      csrfPrevention: false,
       context: (ctx: ApolloCtx) => ctx,
       schema: await buildSchema({ resolvers, validate: false }),
       plugins: [
