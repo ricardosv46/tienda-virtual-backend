@@ -3,7 +3,7 @@ import { LoginInput, LoginResponse, User, UserCreateInput, UserUpdateInput } fro
 import bcryptjs from 'bcryptjs'
 import { genId } from '../helpers/genId'
 import { emailRegister, recoveryPasswordEmail } from '../helpers/email'
-import { uploadFile } from '../middlewares/uploadFile'
+import { deleteFile, uploadFile } from '../middlewares/uploadFile'
 import { isAuth } from '../middlewares/isAuth'
 import { genJWT } from '../helpers/jwt'
 import { ApolloCtx } from '../interface'
@@ -181,6 +181,7 @@ export default class UserResolvers {
   @Mutation(() => Response)
   async deleteUser(@Arg('id') id: number) {
     const res = await User.delete(id)
+
     if (res.affected === 1) return { success: true, message: 'Eliminado Correctamente' }
     throw new Error('No se pudo Eliminar')
   }

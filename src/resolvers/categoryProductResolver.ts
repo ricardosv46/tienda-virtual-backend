@@ -1,9 +1,8 @@
 import { Arg, Field, Mutation, ObjectType, Query, Resolver, UseMiddleware } from 'type-graphql'
-import { uploadFile } from '../middlewares/uploadFile'
+import { deleteFile, uploadFile } from '../middlewares/uploadFile'
 import { isAuth } from '../middlewares/isAuth'
 import { Response } from './index'
 import { CategoryProduct, CategoryProductCreateInput, CategoryProductUpdateInput } from '../models/CategoryProduct'
-import { FileUpload, GraphQLUpload } from 'graphql-upload'
 
 @ObjectType()
 class CategoryResponse {
@@ -83,7 +82,18 @@ export default class CategoryProductResolver {
   @UseMiddleware(isAuth)
   @Mutation(() => Response)
   async deleteCategory(@Arg('id') id: number) {
+    const category = await CategoryProduct.findOne({ where: { id } })
+
+    if (!category) {
+      throw new Error('La categoria no existe')
+    }
+
     const res = await CategoryProduct.delete(id)
+
+    if (category?.image) {
+      await deleteFile(category?.image)
+    }
+
     if (res.affected === 1) return { success: true, message: 'Eliminado Correctamente' }
     throw new Error('No se pudo Eliminar')
   }

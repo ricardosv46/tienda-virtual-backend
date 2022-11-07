@@ -35,3 +35,7 @@ export const uploadFile = async (file: Upload) => {
     fileStream.pipe(cloudStream)
   })
 }
+
+export const deleteFile = async (id: string) => {
+  return await cloudinary.uploader.destroy(id)
+}
