@@ -34,7 +34,6 @@ export default class CategoryProductResolver {
 
   @UseMiddleware(isAuth)
   @Mutation(() => CategoryProduct)
-  // async createCategory(@Arg('file', () => GraphQLUpload) { createReadStream, filename }: FileUpload) {
   async createCategory(@Arg('input') input: CategoryProductCreateInput) {
     if (!input.image) {
       const res = await CategoryProduct.insert({
@@ -45,10 +44,6 @@ export default class CategoryProductResolver {
       return { id: res.identifiers[0].id, ...input, image: '', condition: false }
     }
     const { url, public_id } = (await uploadFile(input.image)) as { url: string; secure_url: string; public_id: string }
-
-    if (!url) {
-      throw new Error('La imagen no existe')
-    }
 
     const res = await CategoryProduct.insert({
       ...input,
@@ -66,14 +61,18 @@ export default class CategoryProductResolver {
     if (!category) throw new Error('La categoria no existe')
 
     if (input.image) {
-      const { url } = (await uploadFile(input.image)) as { url: string; secure_url: string }
+      const { url, public_id } = (await uploadFile(input.image)) as { url: string; secure_url: string; public_id: string }
 
-      const res = await CategoryProduct.update({ id: input.id }, { ...input, image: url })
+      if (category.cloudId) {
+        await deleteFile(category.cloudId)
+      }
+
+      const res = await CategoryProduct.update({ id: input.id }, { ...input, image: url, cloudId: public_id })
 
       if (res.affected === 1) return { success: true, message: 'Actualizado Correctamente' }
     }
 
-    const res = await CategoryProduct.update({ id: input.id }, { ...input, image: '' })
+    const res = await CategoryProduct.update({ id: input.id }, { ...input, image: category.image, cloudId: category.cloudId })
 
     if (res.affected === 1) return { success: true, message: 'Actualizado Correctamente' }
 
