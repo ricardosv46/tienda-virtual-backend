@@ -1,6 +1,7 @@
 import { GraphQLUpload } from 'graphql-upload'
 import { Field, InputType, ObjectType } from 'type-graphql'
 import { BaseEntity, Column, Entity, ManyToOne, PrimaryGeneratedColumn } from 'typeorm'
+import { Upload } from '../interface'
 import { CategoryProduct } from './CategoryProduct'
 
 @Entity()
@@ -69,7 +70,7 @@ export class ProductCreateInput {
   brand: string
 
   @Field(() => GraphQLUpload, { nullable: true })
-  image?: string
+  image?: Upload
 }
 
 @InputType()
@@ -99,5 +100,5 @@ export class ProductUpdateInput {
   condition: boolean
 
   @Field(() => GraphQLUpload, { nullable: true })
-  image?: string
+  image?: Upload
 }

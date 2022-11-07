@@ -1,6 +1,7 @@
 import { ObjectType, Field, InputType } from 'type-graphql'
 import { GraphQLUpload } from 'graphql-upload'
 import { BaseEntity, Column, Entity, PrimaryGeneratedColumn } from 'typeorm'
+import { Upload } from '../interface'
 
 @Entity()
 @ObjectType()
@@ -88,7 +89,7 @@ export class UserCreateInput {
   rol: string
 
   @Field(() => GraphQLUpload, { nullable: true })
-  image?: string
+  image?: Upload
 }
 
 @InputType()
@@ -121,7 +122,7 @@ export class UserUpdateInput {
   rol: string
 
   @Field(() => GraphQLUpload, { nullable: true })
-  image?: string
+  image?: Upload
 }
 
 @InputType()
