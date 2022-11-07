@@ -36,7 +36,6 @@ export default class CategoryProductResolver {
   @Mutation(() => CategoryProduct)
   // async createCategory(@Arg('file', () => GraphQLUpload) { createReadStream, filename }: FileUpload) {
   async createCategory(@Arg('input') input: CategoryProductCreateInput) {
-    console.log({ image: input.image })
     if (!input.image) {
       const res = await CategoryProduct.insert({
         ...input,
