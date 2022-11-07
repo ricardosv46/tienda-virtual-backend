@@ -81,6 +81,19 @@ export default class CategoryProductResolver {
 
   @UseMiddleware(isAuth)
   @Mutation(() => Response)
+  async updateCategoryCondition(@Arg('id') id: number, @Arg('condition') condition: boolean) {
+    const category = await CategoryProduct.findOne({ where: { id } })
+    if (!category) throw new Error('La categoria no existe')
+
+    const res = await CategoryProduct.update({ id }, { condition })
+
+    if (res.affected === 1) return { success: true, message: 'Actualizado Correctamente' }
+
+    return { success: false, message: 'No se pudo Actualizar' }
+  }
+
+  @UseMiddleware(isAuth)
+  @Mutation(() => Response)
   async deleteCategory(@Arg('id') id: number) {
     const category = await CategoryProduct.findOne({ where: { id } })
 
