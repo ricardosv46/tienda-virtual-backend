@@ -3,6 +3,7 @@ import { uploadFile } from '../middlewares/uploadFile'
 import { isAuth } from '../middlewares/isAuth'
 import { Response } from './index'
 import { CategoryProduct, CategoryProductCreateInput, CategoryProductUpdateInput } from '../models/CategoryProduct'
+import { FileUpload, GraphQLUpload } from 'graphql-upload'
 
 @ObjectType()
 class CategoryResponse {
@@ -34,25 +35,27 @@ export default class CategoryProductResolver {
 
   @UseMiddleware(isAuth)
   @Mutation(() => CategoryProduct)
+  // async createCategory(@Arg('file', () => GraphQLUpload) { createReadStream, filename }: FileUpload) {
   async createCategory(@Arg('input') input: CategoryProductCreateInput) {
+    console.log({ image: input.image })
     if (!input.image) {
       const res = await CategoryProduct.insert({
         ...input,
         image: '',
         condition: false
       })
-
       return { id: res.identifiers[0].id, ...input, image: '', condition: false }
     }
-
     const { url } = (await uploadFile(input.image)) as { url: string; secure_url: string }
 
+    if (!url) {
+      throw new Error('La imagen no existe')
+    }
     const res = await CategoryProduct.insert({
       ...input,
       image: url,
       condition: false
     })
-
     return { id: res.identifiers[0].id, ...input, image: url, condition: false }
   }
 

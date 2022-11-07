@@ -1,12 +1,13 @@
 import { v2 as cloudinary } from 'cloudinary'
 import * as dotenv from 'dotenv'
+import { Upload } from '../interface'
 dotenv.config()
 
 const CLOUD_NAME = process.env.CLOUD_NAME
 const CLOUD_API_KEY = process.env.CLOUD_API_KEY
 const CLOUD_API_SECRET = process.env.CLOUD_API_SECRET
 
-export const uploadFile = async (file: any) => {
+export const uploadFile = async (file: Upload) => {
   // The Upload scalar return a a promise
   const { createReadStream } = await file
   const fileStream = createReadStream()
@@ -24,6 +25,7 @@ export const uploadFile = async (file: any) => {
       // In case something hit the fan
       if (err) {
         reject(err)
+        console.log({ err })
       }
 
       // All good :smile:
