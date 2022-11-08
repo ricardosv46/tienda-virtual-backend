@@ -36,6 +36,7 @@ export default class UserResolvers {
         condition: false,
         password: hasPassword,
         image: '',
+        cloudId: '',
         token
       })
       emailRegister({
@@ -45,12 +46,13 @@ export default class UserResolvers {
       })
       return { success: true, message: 'Revisa tu Email para confirmar tu cuenta' }
     }
-    const { url } = (await uploadFile(input.image)) as { url: string; secure_url: string }
+    const { url, public_id } = (await uploadFile(input.image)) as { url: string; secure_url: string; public_id: string }
     await User.insert({
       ...input,
       password: hasPassword,
       condition: false,
       image: url,
+      cloudId: public_id,
       token
     })
     emailRegister({
