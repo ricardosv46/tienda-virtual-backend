@@ -82,7 +82,9 @@ export default class UserResolvers {
 
     const token = await genJWT(user.id)
 
-    return { username: user.username, email: user.email, name: user.name, lastname: user.lastname, token }
+    const { password, ...userData } = user
+
+    return { ...userData, token }
   }
 
   @UseMiddleware(isAuth)
@@ -98,7 +100,9 @@ export default class UserResolvers {
 
     const token = await genJWT(user.id)
 
-    return { username: user.username, email: user.email, name: user.name, lastname: user.lastname, token }
+    const { password, ...userData } = user
+
+    return { ...userData, token }
   }
 
   @Mutation(() => Response)

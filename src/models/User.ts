@@ -141,14 +141,41 @@ export class LoginInput {
 @ObjectType()
 export class LoginResponse {
   @Field()
-  username: string
+  id: number
 
-  @Field(() => String)
-  email: string
+  @Field()
+  name: string
 
-  @Field(() => String)
+  @Field()
   lastname: string
 
-  @Field(() => String)
+  @Field()
+  username: string
+
+  @Field()
+  email: string
+
+  @Field()
+  dni: string
+
+  @Field()
+  celular: string
+
+  @Field()
+  gender: string
+
+  @Field()
+  image: string
+
+  @Field()
+  cloudId: string
+
+  @Field()
+  condition: boolean
+
+  @Field()
   token: string
+
+  @Field()
+  rol: string
 }
