@@ -83,6 +83,22 @@ export default class UserResolvers {
     return { username: user.username, email: user.email, name: user.name, lastname: user.lastname, token }
   }
 
+  @UseMiddleware(isAuth)
+  @Mutation(() => LoginResponse)
+  async refreshToken(@Ctx() { req }: ApolloCtx) {
+    const id = req.id
+
+    const user = await User.findOne({ where: { id } })
+
+    if (!user) {
+      throw new Error('Token Invalido')
+    }
+
+    const token = await genJWT(user.id)
+
+    return { username: user.username, email: user.email, name: user.name, lastname: user.lastname, token }
+  }
+
   @Mutation(() => Response)
   async confirm(@Arg('token') token: string) {
     const user = await User.findOne({ where: { token } })
