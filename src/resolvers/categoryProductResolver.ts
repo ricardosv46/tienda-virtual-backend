@@ -29,7 +29,7 @@ export default class CategoryProductResolver {
       throw new Error('La categoria no existe')
     }
 
-    return category
+    return { ...category }
   }
 
   @UseMiddleware(isAuth)
