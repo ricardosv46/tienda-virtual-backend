@@ -60,7 +60,7 @@ export default class CategoryProductResolver {
     const category = await CategoryProduct.findOne({ where: { id: input.id } })
     if (!category) throw new Error('La categoria no existe')
 
-    if (input.image) {
+    if (input.image && typeof input.image === 'object') {
       const { url, public_id } = (await uploadFile(input.image)) as { url: string; secure_url: string; public_id: string }
 
       if (category.cloudId) {
