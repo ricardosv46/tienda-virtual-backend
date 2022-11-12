@@ -58,9 +58,6 @@ export class CategoryProductUpdateInput {
   @Field()
   description: string
 
-  @Field()
-  condition: boolean
-
   @Field(() => GraphQLUpload, { nullable: true })
   image: Upload
 }
