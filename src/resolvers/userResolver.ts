@@ -19,6 +19,25 @@ class UsersResponse {
 
 @Resolver()
 export default class UserResolvers {
+  @UseMiddleware(isAuth)
+  @Query(() => UsersResponse)
+  async getAllUsers(@Arg('page') page: number, @Arg('numberPage') numberPage: number) {
+    const [res, count] = await User.findAndCount({ take: numberPage, skip: (page - 1) * numberPage })
+    return { data: res, total: count }
+  }
+
+  @UseMiddleware(isAuth)
+  @Query(() => User)
+  async getUserId(@Arg('id') id: number) {
+    const user = await User.findOne({ where: { id } })
+
+    if (!user) {
+      throw new Error('El usuario no existe')
+    }
+
+    return user
+  }
+
   @Mutation(() => Response)
   async register(@Arg('input') input: UserCreateInput) {
     const user = await User.findOne({ where: { email: input.email } })
@@ -118,26 +137,6 @@ export default class UserResolvers {
     throw new Error('No se pudo Confirmar')
   }
 
-  @UseMiddleware(isAuth)
-  @Query(() => UsersResponse)
-  async getAllUsers(@Arg('page') page: number, @Arg('numberPage') numberPage: number) {
-    const [res, count] = await User.findAndCount({ take: numberPage, skip: (page - 1) * numberPage })
-    return { data: res, total: count }
-  }
-
-  @UseMiddleware(isAuth)
-  @Query(() => User)
-  async getUserId(@Arg('id') id: number) {
-    const user = await User.findOne({ where: { id } })
-
-    if (!user) {
-      throw new Error('El usuario no existe')
-    }
-
-    return user
-  }
-
-  @UseMiddleware(isAuth)
   @Mutation(() => Response)
   async recoveryPassword(@Arg('email') email: string) {
     const user = await User.findOne({ where: { email } })
@@ -155,6 +154,24 @@ export default class UserResolvers {
     })
 
     return { success: true, message: 'Se ha enviado un correo para restablecer la contraseña' }
+  }
+
+  @Mutation(() => Response)
+  async changePasswordRecovery(@Arg('token') token: string, @Arg('passowrd') password: string) {
+    const user = await User.findOne({ where: { token } })
+    if (!user) {
+      throw new Error('Token no válido')
+    }
+
+    const salt = bcryptjs.genSaltSync()
+    const hasPassword = bcryptjs.hashSync(password, salt)
+
+    user.password = hasPassword
+    user.token = ''
+
+    await User.update({ id: user.id }, user)
+
+    return { success: true, message: 'Password modificado correctamente' }
   }
 
   @UseMiddleware(isAuth)
