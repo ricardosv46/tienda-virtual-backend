@@ -218,10 +218,17 @@ export default class UserResolvers {
 
   @UseMiddleware(isAuth)
   @Mutation(() => Response)
-  async deleteUser(@Arg('id') id: number) {
-    const res = await User.delete(id)
+  async deleteUser(@Ctx() { req }: ApolloCtx, @Arg('id') id: number) {
+    const userId = req.id
 
-    if (res.affected === 1) return { success: true, message: 'Eliminado Correctamente' }
-    throw new Error('No se pudo Eliminar')
+    const user = await User.findOne({ where: { id: userId } })
+
+    if (user?.rol === 'admin') {
+      const res = await User.delete(id)
+
+      if (res.affected === 1) return { success: true, message: 'Eliminado Correctamente' }
+    }
+
+    throw new Error('No tienes permisos')
   }
 }
