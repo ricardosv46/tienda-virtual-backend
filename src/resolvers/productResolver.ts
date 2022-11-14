@@ -51,7 +51,7 @@ export default class ProductResolver {
         calification: ''
       })
 
-      return { id: res.identifiers[0].id, ...input, image: '', condition: false, calification: '' }
+      return { id: res.identifiers[0].id, ...input, image: '', condition: false, calification: '', cloudId: '' }
     }
 
     const { url, public_id } = (await uploadFile(input.image)) as { url: string; public_id: string }
@@ -65,7 +65,7 @@ export default class ProductResolver {
       calification: ''
     })
 
-    return { id: res.identifiers[0].id, ...input, image: url, condition: false, calification: '' }
+    return { id: res.identifiers[0].id, ...input, image: url, condition: false, calification: '', cloudId: public_id }
   }
 
   @UseMiddleware(isAuth)

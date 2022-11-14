@@ -41,7 +41,7 @@ export default class CategoryProductResolver {
         image: '',
         condition: false
       })
-      return { id: res.identifiers[0].id, ...input, image: '', condition: false }
+      return { id: res.identifiers[0].id, ...input, image: '', condition: false, cloudId: '' }
     }
     const { url, public_id } = (await uploadFile(input.image)) as { url: string; secure_url: string; public_id: string }
 
