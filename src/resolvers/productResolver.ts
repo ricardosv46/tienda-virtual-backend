@@ -39,21 +39,24 @@ export default class ProductResolver {
       const res = await Product.insert({
         ...input,
         image: '',
-        condition: false
+        condition: false,
+        calification: ''
       })
 
-      return { id: res.identifiers[0].id, ...input, image: '', condition: false }
+      return { id: res.identifiers[0].id, ...input, image: '', condition: false, calification: '' }
     }
 
-    const { url } = (await uploadFile(input.image)) as { url: string; secure_url: string }
+    const { url, public_id } = (await uploadFile(input.image)) as { url: string; public_id: string }
 
     const res = await Product.insert({
       ...input,
       image: url,
-      condition: false
+      cloudId: public_id,
+      condition: false,
+      calification: ''
     })
 
-    return { id: res.identifiers[0].id, ...input, image: url, condition: false }
+    return { id: res.identifiers[0].id, ...input, image: url, condition: false, calification: '' }
   }
 
   @UseMiddleware(isAuth)

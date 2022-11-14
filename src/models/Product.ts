@@ -68,9 +68,6 @@ export class ProductCreateInput {
   stock: number
 
   @Field()
-  calification: string
-
-  @Field()
   brand: string
 
   @Field(() => GraphQLUpload, { nullable: true })
