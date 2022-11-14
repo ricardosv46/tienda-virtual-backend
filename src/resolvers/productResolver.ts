@@ -3,6 +3,7 @@ import { uploadFile } from '../middlewares/uploadFile'
 import { isAuth } from '../middlewares/isAuth'
 import { Response } from './index'
 import { Product, ProductCreateInput, ProductUpdateInput } from '../models/Product'
+import { CategoryProduct } from '../models/CategoryProduct'
 
 @ObjectType()
 class ProductResponse {
@@ -35,10 +36,17 @@ export default class ProductResolver {
   @UseMiddleware(isAuth)
   @Mutation(() => Product)
   async createProduct(@Arg('input') input: ProductCreateInput) {
+    const category = await CategoryProduct.findOne({ where: { id: input.category } })
+
+    if (!category) {
+      throw new Error('La categoria no existe')
+    }
+
     if (!input.image) {
       const res = await Product.insert({
         ...input,
         image: '',
+        category,
         condition: false,
         calification: ''
       })
@@ -52,6 +60,7 @@ export default class ProductResolver {
       ...input,
       image: url,
       cloudId: public_id,
+      category,
       condition: false,
       calification: ''
     })
